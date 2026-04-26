@@ -115,8 +115,20 @@ async function initDB() {
     connectionLimit: 3,
   });
 
-  const conn = await tempPool.getConnection();
-  console.log('✅ MySQL connected successfully');
+  let conn;
+  let retries = 5;
+  while (retries > 0) {
+    try {
+      conn = await tempPool.getConnection();
+      console.log('✅ MySQL connected successfully');
+      break;
+    } catch (err) {
+      console.log(`⏳ Waiting for MySQL... (${retries} retries left)`);
+      retries--;
+      if (retries === 0) throw err;
+      await new Promise(res => setTimeout(res, 3000)); // Wait 3s
+    }
+  }
 
   // Create database if not exists
   await conn.query(`CREATE DATABASE IF NOT EXISTS \`${config.db.database}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`);
