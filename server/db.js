@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS students (
   bank_ifsc_code         VARCHAR(20),
   fees                   DECIMAL(10,2) NOT NULL DEFAULT 0,
   document_path          VARCHAR(255) DEFAULT '',
-  notes                  TEXT DEFAULT '',
+  notes                  TEXT,
   partner_id             INT DEFAULT NULL,
   batch_id               INT DEFAULT NULL,
   created_by             INT NOT NULL,
